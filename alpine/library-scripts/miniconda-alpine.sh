@@ -40,7 +40,9 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
     mkdir -p "$CONDA_DIR"
     wget "http://repo.continuum.io/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh" -O miniconda.sh
 
-    if [[ $(sha256sum miniconda.sh) = "$CONDA_SHA256  miniconda.sh" ]];then 
+    
+    
+    if echo "$CONDA_SHA256  miniconda.sh" | sha256sum -c -;then 
 
         echo "**** install Miniconda ****"
         bash miniconda.sh -f -b -p "$CONDA_DIR"
