@@ -33,7 +33,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN apk update && ash /tmp/library-scripts/miniconda-alpine.sh "${CONDA_VERSION}" "${CONDA_SHA256}" "${CONDA_DIR}"
 
 RUN apk update \
-    && apk add --no-cache --update nodejs npm
+    && apk add --no-cache --update nodejs npm openssl
 
 RUN apk update && ash /tmp/library-scripts/jupyter-alpine.sh "${CONDA_DIR}"
 
