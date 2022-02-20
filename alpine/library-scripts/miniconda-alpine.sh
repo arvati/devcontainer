@@ -55,13 +55,16 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         echo ". /etc/profile.d/base.sh" >> ~/.bashrc
 
         echo "**** setup Miniconda ****"
-        conda update --all --yes
-        conda config --set auto_update_conda False
+        $CONDA_DIR/bin/conda init bash
+        $CONDA_DIR/bin/conda update --all --yes
+        $CONDA_DIR/bin/conda config --set auto_update_conda False
 
         echo "**** finalize setup ****"
         mkdir -p "$CONDA_DIR/locks"
         chmod 777 "$CONDA_DIR/locks"
 
+	$CONDA_DIR/bin/conda clean --all --force-pkgs-dirs --yes
+	    
         PACKAGES_ALREADY_INSTALLED="true"
     fi
 fi
@@ -71,7 +74,6 @@ if [ "${PACKAGES_ALREADY_DELETED}" != "true" ]; then
     echo "**** cleanup ****"
     apk del --purge
     rm -f miniconda.sh
-    conda clean --all --force-pkgs-dirs --yes
     find "$CONDA_DIR" -follow -type f \( -iname "*.a" -o -iname "*.pyc" -o -iname "*.js.map" \) -delete
 
     PACKAGES_ALREADY_DELETED="true"

@@ -32,6 +32,18 @@ if [ -f "${MARKER_FILE}" ]; then
     source "${MARKER_FILE}"
 fi
 
+if [ "${ENVIRONMENT_ALREADY_INSTALLED}" != "true" ]; then
+    
+    $CONDA_DIR/bin/conda init bash
+    
+    # Update Python environment based on environment.yml (if present)
+    if [ -f "/tmp/conda-tmp/environment.yml" ]; then 
+        $CONDA_DIR/bin/conda env update -n base -vv -f /tmp/conda-tmp/environment.yml
+    fi
+
+    ENVIRONMENT_ALREADY_INSTALLED="true"
+fi   
+
 if [ "${PYLINT_ALREADY_INSTALLED}" != "true" ]; then
     
     # Install pylint
@@ -40,17 +52,7 @@ if [ "${PYLINT_ALREADY_INSTALLED}" != "true" ]; then
     PYLINT_ALREADY_INSTALLED="true"
 fi
 
- if [ "${ENVIRONMENT_ALREADY_INSTALLED}" != "true" ]; then
-    
-    # Update Python environment based on environment.yml (if present)
-    if [ -f "/tmp/conda-tmp/environment.yml" ]; then 
-        $CONDA_DIR/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml
-    fi
-
-    ENVIRONMENT_ALREADY_INSTALLED="true"
-fi   
-
- if [ "${XPYTHON_ALREADY_INSTALLED}" != "true" ]; then
+if [ "${XPYTHON_ALREADY_INSTALLED}" != "true" ]; then
     
     # Install xpython
     $CONDA_DIR/bin/conda update xeus-python notebook \
@@ -70,8 +72,6 @@ fi
 
     NODE_ALREADY_CONFIGURED="true"
 fi 
-
-
 
 
 # Write marker file

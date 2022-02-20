@@ -24,5 +24,4 @@ dependencies:
   - pip
   - pip:
     - gspread
-    - pylint
 prefix: /opt/conda
