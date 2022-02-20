@@ -32,6 +32,39 @@ if [ -f "${MARKER_FILE}" ]; then
     source "${MARKER_FILE}"
 fi
 
+if [ "${COMMUNITY_ALREADY_CONFIGURED}" != "true" ]; then
+
+    cat > /etc/apk/repositories << EOF; $(echo)
+
+https://dl-cdn.alpinelinux.org/alpine/v$(cat /etc/alpine-release | cut -d'.' -f1,2)/main/
+https://dl-cdn.alpinelinux.org/alpine/v$(cat /etc/alpine-release | cut -d'.' -f1,2)/community/
+https://dl-cdn.alpinelinux.org/alpine/edge/testing/
+
+EOF
+    apk update
+    COMMUNITY_ALREADY_CONFIGURED="true"
+fi   
+
+if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
+    
+    apk add --no-cache --update-cache \
+        python3-dev python3 \
+        ipython \
+        py3-setuptools \
+        py3-pip \
+        py3-dotenv \
+        py3-numpy \
+        py3-pandas \
+        geos \
+        gfortran \
+        musl-dev \
+        g++ gcc build-base \
+        freetype-dev libpng-dev openblas-dev
+
+
+    PACKAGES_ALREADY_INSTALLED="true"
+fi
+
 if [ "${ENVIRONMENT_ALREADY_INSTALLED}" != "true" ]; then
     
     $CONDA_DIR/bin/conda init bash
@@ -43,14 +76,6 @@ if [ "${ENVIRONMENT_ALREADY_INSTALLED}" != "true" ]; then
 
     ENVIRONMENT_ALREADY_INSTALLED="true"
 fi   
-
-if [ "${PYLINT_ALREADY_INSTALLED}" != "true" ]; then
-    
-    # Install pylint
-    $CONDA_DIR/bin/pip install pylint
-
-    PYLINT_ALREADY_INSTALLED="true"
-fi
 
 if [ "${XPYTHON_ALREADY_INSTALLED}" != "true" ]; then
     
@@ -77,9 +102,10 @@ fi
 # Write marker file
 mkdir -p "$(dirname "${MARKER_FILE}")"
 echo -e "\
-    PYLINT_ALREADY_INSTALLED=${PYLINT_ALREADY_INSTALLED}\n\
+    PACKAGES_ALREADY_INSTALLED=${PACKAGES_ALREADY_INSTALLED}\n\
     XPYTHON_ALREADY_INSTALLED=${XPYTHON_ALREADY_INSTALLED}\n\
     NODE_ALREADY_CONFIGURED=${NODE_ALREADY_CONFIGURED}\n\
+    COMMUNITY_ALREADY_CONFIGURED=${COMMUNITY_ALREADY_CONFIGURED}\n\
     ENVIRONMENT_ALREADY_INSTALLED=${ENVIRONMENT_ALREADY_INSTALLED}" > "${MARKER_FILE}"
 
 echo "Done!"
