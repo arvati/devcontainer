@@ -1,0 +1,27 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - chart-studio
+  - xeus-python
+  - ipython
+  - notebook
+  - jupyterlab
+  - geopandas
+  - pygeos
+  - numpy-financial
+  - chart-studio
+  - cufflinks-py
+  - python-dotenv
+  - kaggle
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - shapely
+  - plotly
+  - pip
+  - pip:
+    - gspread
+prefix: /opt/conda
