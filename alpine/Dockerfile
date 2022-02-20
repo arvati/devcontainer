@@ -10,6 +10,10 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+# Copy environment.yml (if found) to a temp locaition so we update the environment. Also
+# copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
+COPY environment.yml* noop.txt /tmp/conda-tmp/
+
 COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
 RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" 
 
@@ -27,10 +31,6 @@ ENV PATH="$CONDA_DIR/bin:$PATH"
 ENV PYTHONDONTWRITEBYTECODE=1
 
 RUN apk update && ash /tmp/library-scripts/miniconda-alpine.sh "${CONDA_VERSION}" "${CONDA_SHA256}" "${CONDA_DIR}"
-
-# Copy environment.yml (if found) to a temp locaition so we update the environment. Also
-# copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-COPY environment.yml* noop.txt /tmp/conda-tmp/
 
 RUN apk update \
     && apk add --no-cache --update nodejs npm
