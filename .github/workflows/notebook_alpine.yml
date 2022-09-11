@@ -1,5 +1,5 @@
 # change name here
-name: build and push alpine image
+name: build and push notebook alpine image
 
 on:
   #schedule:
@@ -9,14 +9,14 @@ on:
     branches: [ master ]
     paths:
       # path to listen
-      - alpine/Dockerfile
-      - alpine/environment.yml
-      - alpine/noop.txt
-      - alpine/library-scripts/common-alpine.sh
-      - alpine/library-scripts/glibc-alpine.sh
-      - alpine/library-scripts/jupyter-alpine.sh
-      - alpine/library-scripts/miniconda-alpine.sh
-      - alpine/library-scripts/meta.env
+      - 'Jupyter Notebook'/alpine/Dockerfile
+      - 'Jupyter Notebook'/alpine/environment.yml
+      - 'Jupyter Notebook'/alpine/noop.txt
+      - 'Jupyter Notebook'/alpine/library-scripts/common-alpine.sh
+      - 'Jupyter Notebook'/alpine/library-scripts/glibc-alpine.sh
+      - 'Jupyter Notebook'/alpine/library-scripts/jupyter-alpine.sh
+      - 'Jupyter Notebook'/alpine/library-scripts/miniconda-alpine.sh
+      - 'Jupyter Notebook'/alpine/library-scripts/meta.env
 jobs:
   docker:
     env:
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: ['3.15']
+        tag: ['notebook']
     steps:
       # https://github.com/actions/checkout
       - uses: actions/checkout@v2
@@ -52,8 +52,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             VARIANT=${{ matrix.tag }}
-          context: ${{ env.suffix }}/
-          file: ${{ env.suffix }}/Dockerfile
+          context: 'Jupyter Notebook'/${{ env.suffix }}/
+          file: 'Jupyter Notebook'/${{ env.suffix }}/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ github.repository_owner }}/devcontainer:${{ env.suffix }}_${{ matrix.tag }}

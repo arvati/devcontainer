@@ -1,5 +1,5 @@
 # change name here
-name: build and push debian image
+name: build and push foundry debian image
 
 on:
   #schedule:
@@ -9,10 +9,12 @@ on:
     branches: [ master ]
     paths:
       # path to listen
-      - debian/Dockerfile
-      - debian/environment.yml
-      - debian/noop.txt
-      - debian/library-scripts/common-debian.sh
+      - solidity/debian/Dockerfile
+      - solidity/debian/library-scripts/common-debian.sh
+      - solidity/debian/library-scripts/foundry-debian.sh
+      - solidity/debian/library-scripts/node-debian.sh
+      - solidity/debian/library-scripts/powershell-debian.sh
+      - solidity/debian/library-scripts/vsdc-settings.env
 
 jobs:
   docker:
@@ -22,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: ['miniconda3']
+        tag: ['solidity']
     steps:
       # https://github.com/actions/checkout
       - uses: actions/checkout@v2
@@ -47,10 +49,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: |
-            VARIANT=${{ matrix.tag }}
-          context: ${{ env.suffix }}/
-          file: ${{ env.suffix }}/Dockerfile
+          #build-args: |
+          #  VARIANT=${{ matrix.tag }}
+          context: solidity/${{ env.suffix }}/
+          file: solidity/${{ env.suffix }}/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ github.repository_owner }}/devcontainer:${{ env.suffix }}_${{ matrix.tag }}
