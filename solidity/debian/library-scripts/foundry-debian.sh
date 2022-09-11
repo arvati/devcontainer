@@ -9,7 +9,7 @@
 # Syntax: ./foundry-debian.sh [branch version] [non-root user] [Add FOUNDRY_DIR to rc files flag] [FOUNDRY_DIR]
 
 
-FOUNDRY_BRANCH=${1:-"master"}
+FOUNDRY_VERSION=${1:-"nightly"}
 USERNAME=${2:-"automatic"}
 UPDATE_RC=${3:-"true"}
 
@@ -120,7 +120,7 @@ if [ ! -f "/usr/local/bin/forge" ]; then
     chmod +x $FOUNDRYUP_BIN_PATH
     if [ "$exit_code" = "0" ]; then
         export FOUNDRY_DIR=${FOUNDRY_DIR-"/opt/foundry"}
-        $FOUNDRYUP_BIN_PATH -b "${FOUNDRY_BRANCH}"
+        $FOUNDRYUP_BIN_PATH -v "${FOUNDRY_VERSION}"
     else
         echo "(!) Download Foundryup failed."
     fi

@@ -22,7 +22,14 @@ ARG NVM_VERSION="0.39.1"
 
 ARG POWERSHELL_VERSION="latest"
 
-ARG FOUNDRY_BRANCH="master"
+ARG CARGO_HOME="/usr/local/cargo"
+ARG RUSTUP_HOME="/usr/local/rustup"
+ARG UPDATE_RUST="false"
+ARG RUST_VERSION="latest"
+ARG RUSTUP_PROFILE="minimal"
+
+ARG FOUNDRY_VERSION="nightly"
+ARG FOUNDRY_DIR="/opt/foundry"
 
 COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -30,7 +37,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true"\
     && /bin/bash /tmp/library-scripts/node-debian.sh "${NVM_DIR}" "${NODE_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${INSTALL_TOOLS_FOR_NODE_GYP}" "${NVM_VERSION}"\
     && /bin/bash /tmp/library-scripts/powershell-debian.sh "${POWERSHELL_VERSION}"\
-    && /bin/bash /tmp/library-scripts/foundry-debian.sh "${FOUNDRY_BRANCH}"\
+    && /bin/bash /tmp/library-scripts/rust-debian.sh "${CARGO_HOME}" "${RUSTUP_HOME}" "${USERNAME}" "${UPDATE_RC}" "${UPDATE_RUST}" "${RUST_VERSION}" "${RUSTUP_PROFILE}"\
+    && /bin/bash /tmp/library-scripts/foundry-debian.sh "${FOUNDRY_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${FOUNDRY_DIR}"\
     #
     # ****************************************************************************
     # * TODO: Add any additional OS packages you want included in the definition *
