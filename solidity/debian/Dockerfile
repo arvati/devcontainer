@@ -30,7 +30,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true"\
     && /bin/bash /tmp/library-scripts/node-debian.sh "${NVM_DIR}" "${NODE_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${INSTALL_TOOLS_FOR_NODE_GYP}" "${NVM_VERSION}"\
     && /bin/bash /tmp/library-scripts/powershell-debian.sh "${POWERSHELL_VERSION}"\
-    && /bin/bash /tmp/library-scripts/foundrydebian.sh "${FOUNDRY_BRANCH}"\
+    && /bin/bash /tmp/library-scripts/foundry-debian.sh "${FOUNDRY_BRANCH}"\
     #
     # ****************************************************************************
     # * TODO: Add any additional OS packages you want included in the definition *
