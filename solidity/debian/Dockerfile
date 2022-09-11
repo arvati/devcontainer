@@ -25,7 +25,7 @@ ARG POWERSHELL_VERSION="latest"
 ARG FOUNDRY_BRANCH="master"
 
 # Backports outdated debain packages
-RUN echo 'deb http://deb.debian.org/debian stable-backports main' > /etc/apt/sources.list.d/backports.list
+#RUN echo 'deb http://deb.debian.org/debian stable-backports main' > /etc/apt/sources.list.d/backports.list
 
 COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
