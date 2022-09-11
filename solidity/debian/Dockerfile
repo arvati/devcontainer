@@ -1,4 +1,4 @@
-ARG VARIANT=stable-backports
+ARG VARIANT=bullseye-backports
 FROM debian:${VARIANT}
 
 
