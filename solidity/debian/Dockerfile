@@ -49,6 +49,11 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     # Clean up
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
+USER $USERNAME
+ENV  USER=$USERNAME HOME=/home/$USERNAME
+WORKDIR /home/$USERNAME
+RUN curl -fsSL https://get.deta.dev/cli.sh | sh
+RUN npm install --global hardhat-shorthand @remix-project/remixd
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
