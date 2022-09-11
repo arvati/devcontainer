@@ -9,10 +9,10 @@ on:
     branches: [ master ]
     paths:
       # path to listen
-      - 'Jupyter Notebook'/debian/Dockerfile
-      - 'Jupyter Notebook'/debian/environment.yml
-      - 'Jupyter Notebook'/debian/noop.txt
-      - 'Jupyter Notebook'/debian/library-scripts/common-debian.sh
+      - "Jupyter Notebook/debian/Dockerfile"
+      - "Jupyter Notebook/debian/environment.yml"
+      - "Jupyter Notebook/debian/noop.txt"
+      - "Jupyter Notebook/debian/library-scripts/common-debian.sh"
 
 jobs:
   docker:
@@ -49,8 +49,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             VARIANT=${{ matrix.tag }}
-          context: 'Jupyter Notebook'/${{ env.suffix }}/
-          file: 'Jupyter Notebook'/${{ env.suffix }}/Dockerfile
+          context: "Jupyter Notebook/${{ env.suffix }}/"
+          file: "Jupyter Notebook/${{ env.suffix }}/Dockerfile"
           platforms: linux/amd64
           push: true
           tags: ${{ github.repository_owner }}/devcontainer:${{ env.suffix }}_${{ matrix.tag }}

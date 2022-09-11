@@ -9,14 +9,14 @@ on:
     branches: [ master ]
     paths:
       # path to listen
-      - Jupyter Notebook/alpine/Dockerfile
-      - Jupyter Notebook/alpine/environment.yml
-      - Jupyter Notebook/alpine/noop.txt
-      - Jupyter Notebook/alpine/library-scripts/common-alpine.sh
-      - Jupyter Notebook/alpine/library-scripts/glibc-alpine.sh
-      - Jupyter Notebook/alpine/library-scripts/jupyter-alpine.sh
-      - Jupyter Notebook/alpine/library-scripts/miniconda-alpine.sh
-      - Jupyter Notebook/alpine/library-scripts/meta.env
+      - "Jupyter Notebook/alpine/Dockerfile"
+      - "Jupyter Notebook/alpine/environment.yml"
+      - "Jupyter Notebook/alpine/noop.txt"
+      - "Jupyter Notebook/alpine/library-scripts/common-alpine.sh"
+      - "Jupyter Notebook/alpine/library-scripts/glibc-alpine.sh"
+      - "Jupyter Notebook/alpine/library-scripts/jupyter-alpine.sh"
+      - "Jupyter Notebook/alpine/library-scripts/miniconda-alpine.sh"
+      - "Jupyter Notebook/alpine/library-scripts/meta.env"
 jobs:
   docker:
     env:
@@ -52,8 +52,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             VARIANT=${{ matrix.tag }}
-          context: Jupyter Notebook/${{ env.suffix }}/
-          file: Jupyter Notebook/${{ env.suffix }}/Dockerfile
+          context: "Jupyter Notebook/${{ env.suffix }}/"
+          file: "Jupyter Notebook/${{ env.suffix }}/Dockerfile"
           platforms: linux/amd64
           push: true
           tags: ${{ github.repository_owner }}/devcontainer:${{ env.suffix }}_${{ matrix.tag }}
