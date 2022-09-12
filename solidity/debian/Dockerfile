@@ -15,7 +15,7 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 ARG NVM_DIR="/usr/local/share/nvm"
-ARG NODE_VERSION="lts"
+ARG NODE_VERSION="16.17.0"
 ARG UPDATE_RC="true"
 ARG INSTALL_TOOLS_FOR_NODE_GYP="true"
 ARG NVM_VERSION="0.39.1"
@@ -43,8 +43,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && /bin/bash /tmp/library-scripts/rust-debian.sh "${CARGO_HOME}" "${RUSTUP_HOME}" "${USERNAME}" "${UPDATE_RC}" "${UPDATE_RUST}" "${RUST_VERSION}" "${RUSTUP_PROFILE}"\
     && /bin/bash /tmp/library-scripts/foundry-debian.sh "${FOUNDRY_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${FOUNDRY_DIR}"\
     && /bin/bash /tmp/library-scripts/deta-debian.sh "${DETA_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${DETA_INSTALL}"\
-    && export NVM_DIR="/usr/local/share/nvm" && chmod +x "$NVM_DIR/nvm.sh" && "$NVM_DIR/nvm.sh" \
-    && npm install --global hardhat-shorthand @remix-project/remixd \
     # ****************************************************************************
     # * TODO: Add any additional OS packages you want included in the definition *
     # * here. We want to do this before cleanup to keep the "layer" small.       *
@@ -54,8 +52,11 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     # Clean up
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
-
-RUN 
+# add node and npm to path so the commands are available
+ENV NVM_DIR=$NVM_DIR
+ENV NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+RUN npm install --global hardhat-shorthand @remix-project/remixd
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
