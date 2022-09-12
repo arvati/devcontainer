@@ -9,7 +9,7 @@
 # Syntax: ./deta-debian.sh [version] [non-root user] [Add DETA_INSTALL to rc files flag] [DETA_INSTALL]
 
 
-DETA_VERSION=${1:-"v1.3.3-beta"}
+DETA_VERSION=${1:-"1.3.3-beta"}
 USERNAME=${2:-"automatic"}
 UPDATE_RC=${3:-"true"}
 
@@ -119,7 +119,7 @@ if [ ! -f "/usr/local/bin/deta" ]; then
     chmod +x $DETA_CLI_INSTALL
     if [ "$exit_code" = "0" ]; then
         export DETA_INSTALL=${DETA_INSTALL-"/opt/deta"}
-        $DETA_CLI_INSTALL "${DETA_VERSION}"
+        $DETA_CLI_INSTALL "v${DETA_VERSION}"
     else
         echo "(!) Download cli.sh failed."
     fi

@@ -31,7 +31,7 @@ ARG RUSTUP_PROFILE="minimal"
 ARG FOUNDRY_VERSION="nightly"
 ARG FOUNDRY_DIR="/opt/foundry"
 
-ARG DETA_VERSION="v1.3.3-beta"
+ARG DETA_VERSION="1.3.3-beta"
 ARG DETA_INSTALL="/opt/deta"
 
 COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
@@ -53,7 +53,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
 # add node and npm to path so the commands are available
-ENV NVM_DIR=$NVM_DIR
 ENV NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN npm install --global hardhat-shorthand @remix-project/remixd
