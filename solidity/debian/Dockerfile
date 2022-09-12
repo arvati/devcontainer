@@ -43,6 +43,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && /bin/bash /tmp/library-scripts/rust-debian.sh "${CARGO_HOME}" "${RUSTUP_HOME}" "${USERNAME}" "${UPDATE_RC}" "${UPDATE_RUST}" "${RUST_VERSION}" "${RUSTUP_PROFILE}"\
     && /bin/bash /tmp/library-scripts/foundry-debian.sh "${FOUNDRY_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${FOUNDRY_DIR}"\
     && /bin/bash /tmp/library-scripts/deta-debian.sh "${DETA_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${DETA_INSTALL}"\
+    && export NVM_DIR="/usr/local/share/nvm" && "$NVM_DIR/nvm.sh" \
     && npm install --global hardhat-shorthand @remix-project/remixd \
     # ****************************************************************************
     # * TODO: Add any additional OS packages you want included in the definition *
