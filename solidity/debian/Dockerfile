@@ -31,6 +31,9 @@ ARG RUSTUP_PROFILE="minimal"
 ARG FOUNDRY_VERSION="nightly"
 ARG FOUNDRY_DIR="/opt/foundry"
 
+ARG DETA_VERSION="v1.3.3-beta"
+ARG DETA_INSTALL="/opt/deta"
+
 COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends curl ca-certificates \
@@ -39,7 +42,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && /bin/bash /tmp/library-scripts/powershell-debian.sh "${POWERSHELL_VERSION}"\
     && /bin/bash /tmp/library-scripts/rust-debian.sh "${CARGO_HOME}" "${RUSTUP_HOME}" "${USERNAME}" "${UPDATE_RC}" "${UPDATE_RUST}" "${RUST_VERSION}" "${RUSTUP_PROFILE}"\
     && /bin/bash /tmp/library-scripts/foundry-debian.sh "${FOUNDRY_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${FOUNDRY_DIR}"\
-    #
+    && /bin/bash /tmp/library-scripts/deta-debian.sh "${DETA_VERSION}" "${USERNAME}" "${UPDATE_RC}" "${DETA_INSTALL}"\
+    && npm install --global hardhat-shorthand @remix-project/remixd \
     # ****************************************************************************
     # * TODO: Add any additional OS packages you want included in the definition *
     # * here. We want to do this before cleanup to keep the "layer" small.       *
@@ -49,14 +53,15 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     # Clean up
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
-USER $USERNAME
-ENV  USER=$USERNAME HOME=/home/$USERNAME
-WORKDIR /home/$USERNAME
-RUN curl -fsSL https://get.deta.dev/cli.sh | sh
-RUN npm install --global hardhat-shorthand @remix-project/remixd
+
+RUN 
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
+
+USER $USERNAME
+ENV  USER=$USERNAME HOME=/home/$USERNAME
+WORKDIR /home/$USERNAME
 
 #EXPOSE 8888                                           
 #ENTRYPOINT []

@@ -6,20 +6,19 @@
 #
 # Maintainer: Ademar Arvati Filho
 #
-# Syntax: ./foundry-debian.sh [version] [non-root user] [Add FOUNDRY_DIR to rc files flag] [FOUNDRY_DIR]
+# Syntax: ./deta-debian.sh [version] [non-root user] [Add DETA_INSTALL to rc files flag] [DETA_INSTALL]
 
 
-FOUNDRY_VERSION=${1:-"nightly"}
+DETA_VERSION=${1:-"v1.3.3-beta"}
 USERNAME=${2:-"automatic"}
 UPDATE_RC=${3:-"true"}
 
 # Folders
-FOUNDRY_DIR=${4:-"/opt/foundry"}
-FOUNDRY_MAN_DIR="$FOUNDRY_DIR/share/man/man1"
+DETA_INSTALL=${4:-"/opt/deta"}
 
 #FoundryUp
-FOUNDRYUP_BIN_URL="https://raw.githubusercontent.com/foundry-rs/foundry/master/foundryup/foundryup"
-FOUNDRYUP_BIN_PATH="$FOUNDRY_DIR/bin/foundryup"
+DETA_CLI_URL="https://get.deta.dev/cli.sh"
+DETA_CLI_INSTALL="$DETA_INSTALL/bin/cli.sh"
 
 set -e
 
@@ -92,7 +91,7 @@ ensure() {
 export DEBIAN_FRONTEND=noninteractive
 
 # Install curl, tar, git, other dependencies if missing
-check_packages curl ca-certificates gnupg2 tar
+check_packages curl ca-certificates gnupg2 tar unzip
 if ! type git > /dev/null 2>&1; then
     apt_get_update_if_needed
     apt-get -y install --no-install-recommends git
@@ -109,40 +108,35 @@ esac
 
 # Install Foundry
 umask 0002
-mkdir -p "${FOUNDRY_DIR}/bin" "${FOUNDRY_MAN_DIR}"
+mkdir -p "${DETA_INSTALL}/bin" 
 
-if [ ! -f "/usr/local/bin/forge" ]; then
-    echo "Downloading Foundryup ..."
+if [ ! -f "/usr/local/bin/deta" ]; then
+    echo "Downloading cli.sh ..."
     set +e
-    curl -# -L $FOUNDRYUP_BIN_URL -o $FOUNDRYUP_BIN_PATH
+    curl -# -L $DETA_CLI_URL -o $DETA_CLI_INSTALL
     exit_code=$?
     set -e
-    chmod +x $FOUNDRYUP_BIN_PATH
+    chmod +x $DETA_CLI_INSTALL
     if [ "$exit_code" = "0" ]; then
-        export FOUNDRY_DIR=${FOUNDRY_DIR-"/opt/foundry"}
-        $FOUNDRYUP_BIN_PATH -v "${FOUNDRY_VERSION}"
+        export DETA_INSTALL=${DETA_INSTALL-"/opt/deta"}
+        $DETA_CLI_INSTALL "${DETA_VERSION}"
     else
-        echo "(!) Download Foundryup failed."
+        echo "(!) Download cli.sh failed."
     fi
 else
-    echo "Foundry already installed. Skipping."
+    echo "Deta already installed. Skipping."
 fi
-
-
 
 # Add FOUNDRY_PATH bin directory into PATH in bashrc/zshrc files (unless disabled)
 updaterc "$(cat << EOF
-export FOUNDRY_PATH="${FOUNDRY_DIR}"
-if [[ "\${PATH}" != *"\${FOUNDRY_PATH}/bin"* ]]; then export PATH="\${PATH}:\${FOUNDRY_PATH}/bin"; fi
+export DETA_PATH="${DETA_INSTALL}"
+if [[ "\${PATH}" != *"\${DETA_PATH}/bin"* ]]; then export PATH="\${PATH}:\${DETA_PATH}/bin"; fi
 EOF
 )"
 
-chmod -R g+r+w "${FOUNDRY_DIR}/bin"
-find "${FOUNDRY_DIR}/bin" -type d | xargs -n 1 chmod g+s
+chmod -R g+r+w "${DETA_PATH}/bin"
+find "${DETA_PATH}/bin" -type d | xargs -n 1 chmod g+s
 
-ln -s "$FOUNDRY_DIR/bin/forge" "/usr/local/bin/forge"
-ln -s "$FOUNDRY_DIR/bin/cast" "/usr/local/bin/cast"
-ln -s "$FOUNDRY_DIR/bin/anvil" "/usr/local/bin/anvil"
-
+ln -s "$DETA_PATH/bin/deta" "/usr/local/bin/deta"
 
 echo "Done!"
