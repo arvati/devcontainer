@@ -102,7 +102,6 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         ncdu \
         shadow \
         strace \
-		grep \ 
 		tar
 
     # Install man pages - package name varies between 3.12 and earlier versions
