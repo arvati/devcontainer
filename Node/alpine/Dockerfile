@@ -37,9 +37,8 @@ ARG NODE_MODULES="eslint tslint-to-eslint-config typescript"
 RUN \
 	umask 0002 \
     && mkdir -p ${NPM_GLOBAL} \
-	&& mkdir -p /usr/local/etc/ \
-    && touch /usr/local/etc/npmrc \
-    && chown ${USER_UID}:${USER_GID} ${NPM_GLOBAL} /usr/local/etc/npmrc \
+    && touch /etc/npmrc \
+    && chown ${USER_UID}:${USER_GID} ${NPM_GLOBAL} /etc/npmrc \
     && chmod g+s ${NPM_GLOBAL} \
     && npm config -g set prefix ${NPM_GLOBAL} \
     && su ${USERNAME} -c "npm config -g set prefix ${NPM_GLOBAL}" \
