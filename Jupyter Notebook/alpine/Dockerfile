@@ -31,18 +31,22 @@ ARG CONDA_DIR="/opt/conda"
 ENV PATH="$CONDA_DIR/bin:$PATH"
 ENV PYTHONDONTWRITEBYTECODE=1
 
-RUN apk update && ash /tmp/library-scripts/miniconda-alpine.sh "${CONDA_VERSION}" "${CONDA_SHA256}" "${CONDA_DIR}"
+# RUN apk update && ash /tmp/library-scripts/miniconda-alpine.sh "${CONDA_VERSION}" "${CONDA_SHA256}" "${CONDA_DIR}"
 
 RUN apk update \
     && apk add --no-cache --update nodejs npm openssl
 
-RUN apk update && ash /tmp/library-scripts/jupyter-alpine.sh "${CONDA_DIR}"
+# RUN apk update && ash /tmp/library-scripts/jupyter-alpine.sh "${CONDA_DIR}"
 
 
 # Clean up
 RUN rm -rf /tmp/library-scripts /tmp/conda-tmp
 
-EXPOSE 8888                                           
-ENTRYPOINT ["$CONDA_DIR/bin/jupyter", "notebook", "--no-browser","--ip=0.0.0.0","--NotebookApp.token=''","--NotebookApp.password=''"]
+USER $USERNAME
+ENV  USER=$USERNAME HOME=/home/$USERNAME
+WORKDIR /home/$USERNAME
+
+#EXPOSE 8888                                           
+#ENTRYPOINT ["$CONDA_DIR/bin/jupyter", "notebook", "--no-browser","--ip=0.0.0.0","--NotebookApp.token=''","--NotebookApp.password=''"]
 
 SHELL [ "/bin/bash", "--login", "-c" ]

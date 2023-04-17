@@ -50,9 +50,13 @@ RUN \
 # Clean up
 RUN rm -rf /tmp/library-scripts
 
-SHELL [ "/bin/bash", "--login", "-c" ]
-
 COPY docker-entrypoint.sh /usr/local/bin/
+
+USER $USERNAME
+ENV  USER=$USERNAME HOME=/home/$USERNAME
+WORKDIR /home/$USERNAME
+
+SHELL [ "/bin/bash", "--login", "-c" ]
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD [ "node" ]
