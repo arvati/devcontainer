@@ -3,8 +3,6 @@ set -e
 
 CONDA_DIR=${1:-"/opt/conda"}
 SWITCHED_TO_BASH=${2:-"true"}
-
-SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 MARKER_FILE="/usr/local/etc/vscode-dev-containers/jupyter"
 
 # Switch to bash right away
@@ -14,6 +12,8 @@ if [ "${SWITCHED_TO_BASH}" != "true" ]; then
     exec /bin/bash "$0" "$@"
     exit $?
 fi
+
+SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 
 if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'

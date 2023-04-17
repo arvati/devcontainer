@@ -1,11 +1,9 @@
 set -e
 
-CONDA_VERSION=${1:-"py39_4.11.0"}
-CONDA_SHA256=${2:-"4ee9c3aa53329cd7a63b49877c0babb49b19b7e5af29807b793a76bdb1d362b4"}
+CONDA_VERSION=${1:-"py39_4.12.0"}
+CONDA_SHA256=${2:-"78f39f9bae971ec1ae7969f0516017f2413f17796670f7040725dd83fcff5689"}
 CONDA_DIR=${3:-"/opt/conda"}
 SWITCHED_TO_BASH=${4:-"true"}
-
-SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 MARKER_FILE="/usr/local/etc/vscode-dev-containers/miniconda"
 
 # Switch to bash right away
@@ -15,6 +13,8 @@ if [ "${SWITCHED_TO_BASH}" != "true" ]; then
     exec /bin/bash "$0" "$@"
     exit $?
 fi
+
+SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 
 if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
