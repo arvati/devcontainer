@@ -1,6 +1,6 @@
 set -e
 
-ALPINE_GLIBC_PACKAGE_VERSION=${1:-"2.34-r0"}
+ALPINE_GLIBC_PACKAGE_VERSION=${1:-"2.35-r1"}
 LANG=${2:-"C.UTF-8"}
 
 ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download"
@@ -63,9 +63,10 @@ fi
 # Install packages
 if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
     apk add --no-cache \
-        "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
+        --force-overwrite "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
+    apk fix --force-overwrite alpine-baselayout-data
 
     (/usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 "$LANG" || true) && \
         echo "export LANG=$LANG" > /etc/profile.d/locale.sh
