@@ -1,7 +1,7 @@
-# [Choice] Alpine version: 3.15, 3.14, 3.13, 3.12, 3.11
+# [Choice] Alpine version: 3.17, 3.16, 3.15, 3.14, 3.13, 3.12, 3.11
 #ARG VARIANT=3.15
 #FROM alpine:${VARIANT}
-FROM alpine:3.15
+FROM alpine:3.17
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="false"
@@ -31,12 +31,12 @@ ARG CONDA_DIR="/opt/conda"
 ENV PATH="$CONDA_DIR/bin:$PATH"
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# RUN apk update && ash /tmp/library-scripts/miniconda-alpine.sh "${CONDA_VERSION}" "${CONDA_SHA256}" "${CONDA_DIR}"
+RUN apk update && ash /tmp/library-scripts/miniconda-alpine.sh "${CONDA_VERSION}" "${CONDA_SHA256}" "${CONDA_DIR}"
 
 RUN apk update \
     && apk add --no-cache --update nodejs npm openssl
 
-# RUN apk update && ash /tmp/library-scripts/jupyter-alpine.sh "${CONDA_DIR}"
+RUN apk update && ash /tmp/library-scripts/jupyter-alpine.sh "${CONDA_DIR}"
 
 
 # Clean up
@@ -50,3 +50,5 @@ WORKDIR /home/$USERNAME
 #ENTRYPOINT ["$CONDA_DIR/bin/jupyter", "notebook", "--no-browser","--ip=0.0.0.0","--NotebookApp.token=''","--NotebookApp.password=''"]
 
 SHELL [ "/bin/bash", "--login", "-c" ]
+
+CMD [ "/bin/bash" ]

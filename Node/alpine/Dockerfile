@@ -57,7 +57,7 @@ ENV  USER=$USERNAME HOME=/home/$USERNAME
 WORKDIR /home/$USERNAME
 
 SHELL [ "/bin/bash", "--login", "-c" ]
-ENTRYPOINT ["docker-entrypoint.sh"]
+#ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD [ "node" ]
+CMD [ "/bin/bash" ]
 

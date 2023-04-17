@@ -66,7 +66,7 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         --force-overwrite "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
-    # apk fix --force-overwrite alpine-baselayout-data
+    apk fix --force-overwrite alpine-baselayout-data
 
     (/usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 "$LANG" || true) && \
         echo "export LANG=$LANG" > /etc/profile.d/locale.sh
