@@ -1,7 +1,8 @@
 # [Choice] Alpine version: 3.17, 3.16, 3.15, 3.14, 3.13, 3.12, 3.11
 #ARG VARIANT=3.15
 #FROM alpine:${VARIANT}
-FROM alpine:3.17
+#FROM alpine:3.17
+FROM frolvlad/alpine-glibc:alpine-3.17
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="false"
@@ -23,7 +24,7 @@ RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${
 
 ARG GLIBC_VERSION="2.35-r1"
 ENV LANG=C.UTF-8
-RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
+#RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
 
 ARG CONDA_VERSION="py39_4.12.0"
 ARG CONDA_SHA256="78f39f9bae971ec1ae7969f0516017f2413f17796670f7040725dd83fcff5689"
