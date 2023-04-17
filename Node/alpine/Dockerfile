@@ -20,7 +20,7 @@ RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${
 # Install alpine-pkg-glibc from https://github.com/sgerrand/alpine-pkg-glibc
 # Code from https://github.com/Docker-Hub-frolvlad/docker-alpine-glibc/blob/master/Dockerfile
 
-ARG GLIBC_VERSION="2.34-r0"
+ARG GLIBC_VERSION="2.35-r1"
 ENV LANG=C.UTF-8
 RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
 
