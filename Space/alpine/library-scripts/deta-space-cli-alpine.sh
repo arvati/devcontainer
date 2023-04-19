@@ -39,14 +39,17 @@ echo "Installing space-cli v${SPACE_CLI_VERSION}"
 
 # Install go, common dependencies
 if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
+
+    echo "**** get packages go ****"
     apk update
     apk add --no-cache \
         go
-		
     PACKAGES_ALREADY_INSTALLED="true"
 fi
 
 if [ "${SRC_DOWNLOADED}" != "true" ]; then
+
+    echo "**** get space ****"
 	# curl -sL https://github.com/deta/space-cli/archive/refs/tags/v0.3.2.tar.gz | tar -xzC /tmp 2>&1
 	curl -sL "${SPACE_CLI_SRC_URL}" | tar -xzC /tmp 2>&1
     SRC_DOWNLOADED="true"
@@ -54,6 +57,7 @@ fi
 
 if [ "${SRC_DOWNLOADED}" = "true" ] && [ "${SRC_INSTALLED}" != "true" ]; then
 	
+    echo "**** setup space ****"
 	# cd /tmp/space-cli-0.3.2
 	cd "/tmp/${SPACE_CLI_FOLDER}"
 	
@@ -67,6 +71,7 @@ if [ "${SRC_DOWNLOADED}" = "true" ] && [ "${SRC_INSTALLED}" != "true" ]; then
 	# Install the space binary to your $GOPATH/bin
 	# go install
 	
+    echo "**** finalize setup ****"
 	# make available even after uninstalling go package
 	mv space /usr/local/bin/
 	
@@ -74,6 +79,9 @@ if [ "${SRC_DOWNLOADED}" = "true" ] && [ "${SRC_INSTALLED}" != "true" ]; then
 fi
 
 if [ "${SRC_DELETED}" != "true" ]; then
+
+    echo "**** cleanup ****"
+    apk del --purge
 	apk del go
 	cd ~/
     rm -rf "/tmp/${SPACE_CLI_FOLDER}"

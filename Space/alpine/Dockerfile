@@ -1,7 +1,8 @@
 # [Choice] Alpine version: 3.17, 3.16, 3.15, 3.14, 3.13, 3.12, 3.11
 #ARG VARIANT=3.17
 #FROM alpine:${VARIANT}
-FROM alpine:3.17
+#FROM alpine:3.17
+FROM frolvlad/alpine-glibc:alpine-3.17
 
 ENV NODE_VERSION 18.14.2
 
@@ -22,7 +23,21 @@ RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${
 
 ARG GLIBC_VERSION="2.35-r1"
 ENV LANG=C.UTF-8
-RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
+#RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
+
+# Install deta space cli from https://github.com/deta/space-cli
+
+ARG SPACE_CLI_VERSION="0.3.2"
+RUN apk update && ash /tmp/library-scripts/deta-space-cli-alpine.sh "${SPACE_CLI_VERSION}"
+
+ARG CONDA_VERSION="py39_4.12.0"
+ARG CONDA_SHA256="78f39f9bae971ec1ae7969f0516017f2413f17796670f7040725dd83fcff5689"
+ARG CONDA_DIR="/opt/conda"
+ENV PATH="$CONDA_DIR/bin:$PATH"
+ENV PYTHONDONTWRITEBYTECODE=1
+
+RUN apk update && ash /tmp/library-scripts/miniconda-alpine.sh "${CONDA_VERSION}" "${CONDA_SHA256}" "${CONDA_DIR}"
+
 
 RUN apk update \
     && apk add --no-cache --update nodejs npm yarn openssl

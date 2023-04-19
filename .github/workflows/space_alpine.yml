@@ -1,5 +1,5 @@
 # change name here
-name: build and push node alpine image
+name: build and push space alpine image
 
 on:
   #schedule:
@@ -9,11 +9,13 @@ on:
     branches: [ master ]
     paths:
       # path to listen
-      - "Node/alpine/Dockerfile"
-      - "Node/alpine/library-scripts/common-alpine.sh"
-      - "Node/alpine/library-scripts/glibc-alpine.sh"
-      - "Node/alpine/library-scripts/meta.env"
-      # - "Node/alpine/docker-entrypoint.sh"
+      - "Space/alpine/Dockerfile"
+      - "Space/alpine/library-scripts/common-alpine.sh"
+      - "Space/alpine/library-scripts/glibc-alpine.sh"
+      - "Space/alpine/library-scripts/deta-space-cli-alpine.sh"
+      - "Space/alpine/library-scripts/miniconda-alpine.sh"
+      - "Space/alpine/library-scripts/meta.env"
+      #- "Space/alpine/docker-entrypoint.sh"
 jobs:
   docker:
     env:
@@ -22,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: ['node']
+        tag: ['space']
     steps:
       # https://github.com/actions/checkout
       - uses: actions/checkout@v2
@@ -49,8 +51,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             VARIANT=${{ matrix.tag }}
-          context: "Node/${{ env.suffix }}/"
-          file: "Node/${{ env.suffix }}/Dockerfile"
+          context: "Space/${{ env.suffix }}/"
+          file: "Space/${{ env.suffix }}/Dockerfile"
           platforms: linux/amd64
           push: true
           tags: ${{ github.repository_owner }}/devcontainer:${{ env.suffix }}_${{ matrix.tag }}
