@@ -40,10 +40,7 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
 
     echo "**** get Miniconda ****"
     mkdir -p "$CONDA_DIR"
-    wget "http://repo.continuum.io/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh" -O miniconda.sh
-    https://repo.anaconda.com/miniconda/Miniconda3-py39_23.1.0-1-Linux-x86_64.sh
-
-    
+    wget "http://repo.continuum.io/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh" -O miniconda.sh  
     
     if echo "$CONDA_SHA256  miniconda.sh" | sha256sum -c -;then 
 
