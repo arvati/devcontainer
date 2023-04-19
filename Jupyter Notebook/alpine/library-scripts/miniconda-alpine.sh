@@ -2,8 +2,8 @@
 
 set -e
 
-CONDA_VERSION=${1:-"py39_4.12.0"}
-CONDA_SHA256=${2:-"78f39f9bae971ec1ae7969f0516017f2413f17796670f7040725dd83fcff5689"}
+CONDA_VERSION=${1:-"py39_23.1.0-1"}
+CONDA_SHA256=${2:-"5dc619babc1d19d6688617966251a38d245cb93d69066ccde9a013e1ebb5bf18"}
 CONDA_DIR=${3:-"/opt/conda"}
 SWITCHED_TO_BASH=${4:-"true"}
 MARKER_FILE="/usr/local/etc/vscode-dev-containers/miniconda"
