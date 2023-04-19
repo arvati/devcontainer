@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.222.0/containers/alpine
 {
-	"name": "Alpine Node",
+	"name": "Alpine Space",
 	"build": {
 		"dockerfile": "Dockerfile",
 		// Update 'VARIANT' to pick an Alpine version: 3.12, 3.13, 3.14, 3.15, 3.16, 3.17
@@ -21,7 +21,7 @@
 	//"forwardPorts": [8888],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "node --version; npm --version; yarn --version",
+	"postCreateCommand": "node --version; npm --version; yarn --version; space version",
 
 	// Replace when using a ptrace-based debugger like C++, Go, and Rust
 	// "runArgs": [ "--init", "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
