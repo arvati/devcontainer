@@ -1,3 +1,5 @@
+#!/bin/ash
+
 set -e
 
 CONDA_VERSION=${1:-"py39_4.12.0"}

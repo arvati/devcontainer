@@ -1,3 +1,5 @@
+#!/bin/ash
+
 set -e
 
 ALPINE_GLIBC_PACKAGE_VERSION=${1:-"2.35-r1"}
@@ -83,7 +85,7 @@ if [ "${GPG_ALREADY_DELETED}" != "true" ]; then
 fi
 
 if [ "${PACKAGES_ALREADY_DELETED}" != "true" ]; then
-    apk del glibc-i18n 
+    #apk del glibc-i18n 
     rm "/root/.wget-hsts"
     rm \
         "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \

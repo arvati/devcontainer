@@ -24,6 +24,11 @@ ARG GLIBC_VERSION="2.35-r1"
 ENV LANG=C.UTF-8
 RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
 
+# Install deta space cli from https://github.com/deta/space-cli
+
+ARG SPACE_CLI_VERSION="0.3.2"
+RUN apk update && ash /tmp/library-scripts/deta-space-cli-alpine.sh "${SPACE_CLI_VERSION}"
+
 RUN apk update \
     && apk add --no-cache --update nodejs npm yarn openssl
 
