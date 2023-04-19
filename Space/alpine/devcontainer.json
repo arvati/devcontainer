@@ -21,11 +21,12 @@
 	//"forwardPorts": [8888],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "node --version; npm --version; yarn --version; space version",
+	"postCreateCommand": "node --version; npm --version; yarn --version; python --version; space version; conda init bash",
 
 	// Replace when using a ptrace-based debugger like C++, Go, and Rust
 	// "runArgs": [ "--init", "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode"
+	"remoteUser": "vscode",
+	"containerUser": "vscode"
 }
