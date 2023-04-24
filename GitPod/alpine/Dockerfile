@@ -66,7 +66,7 @@ RUN \
     && su ${USERNAME} -c 'ssh-keygen -A' \
     && echo -e "PasswordAuthentication no" >> /etc/ssh/sshd_config \
     && mkdir -p /run/openrc \
-    && touch /run/openrc/softlevel
+    && touch /run/openrc/softlevel \
     && mkdir /workspace && chown -hR ${USERNAME}:${USERNAME} /workspace
 	
 # Clean up
