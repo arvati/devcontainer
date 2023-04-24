@@ -32,7 +32,7 @@ ARG NPM_GLOBAL=/usr/local/share/npm-global
 # Add NPM global to PATH.
 ENV PATH=${NPM_GLOBAL}/bin:${PATH}
 
-ARG NODE_MODULES="eslint tslint-to-eslint-config typescript"
+ARG NODE_MODULES="eslint typescript"
 
 RUN \
 	umask 0002 \
