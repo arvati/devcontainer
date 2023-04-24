@@ -61,6 +61,13 @@ RUN \
     && su ${USERNAME} -c "umask 0002 && npm install -g ${NODE_MODULES}" \
     && npm cache clean --force > /dev/null 2>&1
 
+RUN \
+    apk add openrc openssh \
+    && su ${USERNAME} -c 'ssh-keygen -A' \
+    && echo -e "PasswordAuthentication no" >> /etc/ssh/sshd_config \
+    && mkdir -p /run/openrc \
+    && touch /run/openrc/softlevel
+    && mkdir /workspace && chown -hR ${USERNAME}:${USERNAME} /workspace
 	
 # Clean up
 RUN rm -rf /tmp/library-scripts
@@ -73,6 +80,7 @@ WORKDIR /home/$USERNAME
 
 SHELL [ "/bin/bash", "--login", "-c" ]
 #ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "rc-status; rc-service sshd start"]
 
 CMD [ "/bin/bash" ]
 
