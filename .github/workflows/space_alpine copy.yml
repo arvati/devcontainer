@@ -1,0 +1,60 @@
+# change name here
+name: build and push space alpine image
+
+on:
+  #schedule:
+  #  - cron: "6 3 * * 0"
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      # path to listen
+      - "GitPod/alpine/Dockerfile"
+      - "GitPod/alpine/library-scripts/common-alpine.sh"
+      - "GitPod/alpine/library-scripts/glibc-alpine.sh"
+      - "GitPod/alpine/library-scripts/deta-space-cli-alpine.sh"
+      - "GitPod/alpine/library-scripts/miniconda-alpine.sh"
+      - "GitPod/alpine/library-scripts/meta.env"
+      #- "Space/alpine/docker-entrypoint.sh"
+jobs:
+  docker:
+    env:
+      suffix: gitpod
+    name: Build and Push to Docker Hub ${{ github.repository_owner }}/devcontainer:${{ matrix.tag }}_gitpod
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: ['alpine']
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+      # https://github.com/docker/setup-qemu-action
+      - uses: docker/setup-qemu-action@v1
+      # https://github.com/docker/setup-buildx-action
+      - id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+      # https://github.com/docker/login-action
+      - uses: docker/login-action@v1
+        with:
+          # https://hub.docker.com/settings/security
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Set dynamic env values
+        run: |
+          echo created=$(date -u +'%Y-%m-%dT%H:%M:%SZ') >> $GITHUB_ENV
+      # https://github.com/docker/build-push-action
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: "GitPod/${{ matrix.tag }}/"
+          file: "GitPod/${{ matrix.tag }}/Dockerfile"
+          platforms: linux/amd64
+          push: true
+          tags: ${{ github.repository_owner }}/devcontainer:${{ matrix.tag }}_${{ env.suffix }}
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ env.created }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
