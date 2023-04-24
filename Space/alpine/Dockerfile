@@ -65,7 +65,7 @@ RUN \
 # Clean up
 RUN rm -rf /tmp/library-scripts
 
-COPY docker-entrypoint.sh /usr/local/bin/
+#COPY docker-entrypoint.sh /usr/local/bin/
 
 USER $USERNAME
 ENV  USER=$USERNAME HOME=/home/$USERNAME
