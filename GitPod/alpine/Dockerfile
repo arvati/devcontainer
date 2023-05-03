@@ -80,7 +80,7 @@ WORKDIR /home/$USERNAME
 
 SHELL [ "/bin/bash", "--login", "-c" ]
 #ENTRYPOINT ["docker-entrypoint.sh"]
-ENTRYPOINT ["sh", "-c", "rc-status; rc-service sshd start"]
+#ENTRYPOINT ["sh", "-c", "rc-status; rc-service sshd start"]
 
 CMD [ "/bin/bash" ]
 
