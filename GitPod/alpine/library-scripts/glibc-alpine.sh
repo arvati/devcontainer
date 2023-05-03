@@ -85,12 +85,10 @@ fi
 
 if [ "${PACKAGES_ALREADY_DELETED}" != "true" ]; then
     apk del glibc-i18n 
-    rm "/root/.wget-hsts"
-    rm \
+    rm -f "/root/.wget-hsts" \
         "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" 
-
+        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" 2> /dev/null || echo > /dev/null
     PACKAGES_ALREADY_DELETED="true"
 fi
 
