@@ -102,19 +102,10 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         ncdu \
         shadow \
         strace \
-		tar
-
-    # Install man pages - package name varies between 3.12 and earlier versions
-    if apk info man > /dev/null 2>&1; then
-        apk add --no-cache man man-pages
-    else 
-        apk add --no-cache mandoc man-pages
-    fi
-
-    # Install git if not already installed (may be more recent than distro version)
-    if ! type git > /dev/null 2>&1; then
-        apk add --no-cache git
-    fi
+		tar \ 
+		mandoc \
+		man-pages \
+		git
 
     PACKAGES_ALREADY_INSTALLED="true"
 fi
@@ -305,42 +296,6 @@ if [ "${INSTALL_ZSH}" = "true" ]; then
             chown -R ${USERNAME}:${group_name} "${user_rc_path}"
         fi
     fi
-fi
-
-# Persist image metadata info, script if meta.env found in same directory
-meta_info_script="$(cat << 'EOF'
-#!/bin/sh
-. /usr/local/etc/vscode-dev-containers/meta.env
-# Minimal output
-if [ "$1" = "version" ] || [ "$1" = "image-version" ]; then
-    echo "${VERSION}"
-    exit 0
-elif [ "$1" = "release" ]; then
-    echo "${GIT_REPOSITORY_RELEASE}"
-    exit 0
-elif [ "$1" = "content" ] || [ "$1" = "content-url" ] || [ "$1" = "contents" ] || [ "$1" = "contents-url" ]; then
-    echo "${CONTENTS_URL}"
-    exit 0
-fi
-#Full output
-echo
-echo "Development container image information"
-echo
-if [ ! -z "${VERSION}" ]; then echo "- Image version: ${VERSION}"; fi
-if [ ! -z "${DEFINITION_ID}" ]; then echo "- Definition ID: ${DEFINITION_ID}"; fi
-if [ ! -z "${VARIANT}" ]; then echo "- Variant: ${VARIANT}"; fi
-if [ ! -z "${GIT_REPOSITORY}" ]; then echo "- Source code repository: ${GIT_REPOSITORY}"; fi
-if [ ! -z "${GIT_REPOSITORY_RELEASE}" ]; then echo "- Source code release/branch: ${GIT_REPOSITORY_RELEASE}"; fi
-if [ ! -z "${BUILD_TIMESTAMP}" ]; then echo "- Timestamp: ${BUILD_TIMESTAMP}"; fi
-if [ ! -z "${CONTENTS_URL}" ]; then echo && echo "More info: ${CONTENTS_URL}"; fi
-echo
-EOF
-)"
-if [ -f "${SCRIPT_DIR}/meta.env" ]; then
-    mkdir -p /usr/local/etc/vscode-dev-containers/
-    cp -f "${SCRIPT_DIR}/meta.env" /usr/local/etc/vscode-dev-containers/meta.env
-    echo "${meta_info_script}" > /usr/local/bin/devcontainer-info
-    chmod +x /usr/local/bin/devcontainer-info
 fi
 
 # Write marker file
