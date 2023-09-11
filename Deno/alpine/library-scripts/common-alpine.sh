@@ -102,7 +102,7 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         ncdu \
         shadow \
         strace \
-		tar \ 
+		tar \
 		mandoc \
 		man-pages \
 		git
