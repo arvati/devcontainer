@@ -2,7 +2,7 @@
 
 set -e
 
-SPACE_CLI_VERSION=${1:-"0.3.2"}
+SPACE_CLI_VERSION=${1:-"0.4.1"}
 SPACE_CLI_BASE_URL="https://github.com/deta/space-cli/archive/refs/tags"
 SPACE_CLI_SRC_URL="$SPACE_CLI_BASE_URL/v$SPACE_CLI_VERSION.tar.gz"
 SPACE_CLI_FOLDER="space-cli-$SPACE_CLI_VERSION"

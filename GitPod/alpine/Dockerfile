@@ -27,7 +27,7 @@ ENV LANG=C.UTF-8
 
 # Install deta space cli from https://github.com/deta/space-cli
 
-ARG SPACE_CLI_VERSION="0.3.2"
+ARG SPACE_CLI_VERSION="0.4.1"
 RUN apk update && ash /tmp/library-scripts/deta-space-cli-alpine.sh "${SPACE_CLI_VERSION}"
 
 ARG CONDA_VERSION="py39_23.1.0-1"
