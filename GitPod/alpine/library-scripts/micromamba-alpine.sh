@@ -4,7 +4,8 @@ set -e
 
 MAMBA_VERSION=${1:-"1.5.1-0"}
 CONDA_DIR=${2:-"/opt/conda"}
-SWITCHED_TO_BASH=${3:-"true"}
+USER_GID=${3:-"1000"}
+SWITCHED_TO_BASH=${4:-"true"}
 MARKER_FILE="/usr/local/etc/vscode-dev-containers/micromamba"
 
 # Switch to bash right away
@@ -40,10 +41,12 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
     echo "**** get Micromamba ****"
     # https://micromamba.snakepit.net/api/micromamba/linux-64/latest
     # https://micromamba.snakepit.net/api/micromamba/linux-64/1.5.1-0
-    curl -fsSL --compressed "https://github.com/mamba-org/micromamba-releases/releases/download/micromamba-${MAMBA_VERSION}/micromamba-linux-64"  -o "/usr/bin/micromamba"
+    # https://github.com/mamba-org/micromamba-releases/releases/download/1.5.1-0/micromamba-linux-64
+    curl -fsSL "https://github.com/mamba-org/micromamba-releases/releases/download/${MAMBA_VERSION}/micromamba-linux-64"  --output "/usr/bin/micromamba" --compressed
+    
     chmod +x "/usr/bin/micromamba" 
     mkdir -p "${CONDA_DIR}/conda-meta"
-    chown -R :users "${CONDA_DIR}"
+    chown -R :$USER_GID "${CONDA_DIR}"
     chmod -R 775 "${CONDA_DIR}"
     chmod -R a+rwx "${CONDA_DIR}"
     micromamba shell init --shell=bash --prefix="${CONDA_DIR}/" 

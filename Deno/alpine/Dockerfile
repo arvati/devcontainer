@@ -25,17 +25,9 @@ ARG USER_GID=$USER_UID
 COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
 RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" 
 
-
-
-RUN apk update \
-    && apk add --no-cache --update tini openssl curl zip unzip
-
 ARG DENO_VERSION="1.36.4"
-RUN curl -fsSL https://github.com/denoland/deno/releases/download/v${DENO_VERSION}/deno-x86_64-unknown-linux-gnu.zip \
-    --output deno.zip \
-  && unzip -q deno.zip -d /bin/ \
-  && rm deno.zip \
-  && chmod 755 /bin/deno
+ARG DENO_DIR="/opt/deno"
+RUN apk update && ash /tmp/library-scripts/deno-alpine.sh "${DENO_VERSION}" "${DENO_DIR}" "${USER_GID}" 
 
 # Install deta space cli from https://github.com/deta/space-cli
 

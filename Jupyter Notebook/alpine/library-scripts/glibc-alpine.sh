@@ -56,6 +56,7 @@ fi
 
 # Download packages
 if [ "${PACKAGES_ALREADY_DOWNLOADED}" != "true" ]; then
+    apk add --no-cache --virtual=.build-dependencies wget ca-certificates
     wget "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BASE_PACKAGE_FILENAME"
     wget "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BIN_PACKAGE_FILENAME"
     wget "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
@@ -64,34 +65,32 @@ fi
 
 # Install packages
 if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
-    apk add --no-cache \
-        --force-overwrite "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
+    mv /etc/nsswitch.conf /etc/nsswitch.conf.bak
+    apk add --no-cache --force-overwrite \
+        "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
+    mv /etc/nsswitch.conf.bak /etc/nsswitch.conf   
     apk fix --force-overwrite alpine-baselayout-data
-
+ 
     (/usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 "$LANG" || true) && \
-        echo "export LANG=$LANG" > /etc/profile.d/locale.sh
+    echo "export LANG=$LANG" > /etc/profile.d/locale.sh && \
     chmod +x /etc/profile.d/locale.sh
-
     PACKAGES_ALREADY_INSTALLED="true"
 fi
 
 
 if [ "${GPG_ALREADY_DELETED}" != "true" ]; then
     rm "/etc/apk/keys/sgerrand.rsa.pub" 
-
     GPG_ALREADY_DELETED="true"
 fi
 
 if [ "${PACKAGES_ALREADY_DELETED}" != "true" ]; then
-    #apk del glibc-i18n 
-    rm "/root/.wget-hsts"
-    rm \
+    apk del glibc-i18n 
+    rm -f "/root/.wget-hsts" \
         "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" 
-
+        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" 2> /dev/null || echo > /dev/null
     PACKAGES_ALREADY_DELETED="true"
 fi
 

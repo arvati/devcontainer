@@ -33,17 +33,19 @@ RUN apk update && ash /tmp/library-scripts/deta-space-cli-alpine.sh "${SPACE_CLI
 
 ARG MAMBA_VERSION="1.5.1-0"
 ARG CONDA_DIR="/opt/conda"
-RUN apk update && ash /tmp/library-scripts/micromamba-alpine.sh "${MAMBA_VERSION}" "${CONDA_DIR}"
-
-RUN apk update \
-    && apk add --no-cache --update tini openssl curl zip unzip
+RUN apk update && ash /tmp/library-scripts/micromamba-alpine.sh "${MAMBA_VERSION}" "${CONDA_DIR}" "${USER_GID}"
 
 ARG DENO_VERSION="1.36.4"
-RUN curl -fsSL https://github.com/denoland/deno/releases/download/v${DENO_VERSION}/deno-x86_64-unknown-linux-gnu.zip \
-    --output deno.zip \
-  && unzip -q deno.zip -d /bin/ \
-  && rm deno.zip \
-  && chmod 755 /bin/deno
+ARG DENO_DIR="/opt/deno"
+RUN apk update && ash /tmp/library-scripts/deno-alpine.sh "${DENO_VERSION}" "${DENO_DIR}" "${USER_GID}"
+
+ARG PNPM_VERSION="8.7.5"
+ARG PNPM_HOME="/opt/pnpm"
+RUN apk update && ash /tmp/library-scripts/pnpm-alpine.sh "${PNPM_VERSION}" "${PNPM_HOME}" "${USER_GID}"
+
+ARG FNM_VERSION="1.35.1"
+ARG FNM_DIR="/opt/fnm"
+RUN apk update && ash /tmp/library-scripts/fnm-alpine.sh "${FNM_VERSION}" "${FNM_DIR}" "${USER_GID}"
 
 RUN \
     apk add openrc openssh openssl \
