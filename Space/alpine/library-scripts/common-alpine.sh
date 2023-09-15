@@ -102,19 +102,10 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         ncdu \
         shadow \
         strace \
-		tar
-
-    # Install man pages - package name varies between 3.12 and earlier versions
-    if apk info man > /dev/null 2>&1; then
-        apk add --no-cache man man-pages
-    else 
-        apk add --no-cache mandoc man-pages
-    fi
-
-    # Install git if not already installed (may be more recent than distro version)
-    if ! type git > /dev/null 2>&1; then
-        apk add --no-cache git
-    fi
+		tar \
+		mandoc \
+		man-pages \
+		git
 
     PACKAGES_ALREADY_INSTALLED="true"
 fi

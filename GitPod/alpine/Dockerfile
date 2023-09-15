@@ -14,8 +14,6 @@ RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "$
 
 FROM alpine-glibc
 
-ENV NODE_VERSION 18.14.2
-
 # [Option] Install zsh
 ARG INSTALL_ZSH="false"
 
@@ -33,13 +31,9 @@ RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${
 ARG SPACE_CLI_VERSION="0.4.1"
 RUN apk update && ash /tmp/library-scripts/deta-space-cli-alpine.sh "${SPACE_CLI_VERSION}"
 
-ARG CONDA_VERSION="py39_23.1.0-1"
-ARG CONDA_SHA256="5dc619babc1d19d6688617966251a38d245cb93d69066ccde9a013e1ebb5bf18"
+ARG MAMBA_VERSION="1.5.1-0"
 ARG CONDA_DIR="/opt/conda"
-ENV PATH="$CONDA_DIR/bin:$PATH"
-ENV PYTHONDONTWRITEBYTECODE=1
-
-RUN apk update && ash /tmp/library-scripts/miniconda-alpine.sh "${CONDA_VERSION}" "${CONDA_SHA256}" "${CONDA_DIR}"
+RUN apk update && ash /tmp/library-scripts/micromamba-alpine.sh "${MAMBA_VERSION}" "${CONDA_DIR}"
 
 RUN apk update \
     && apk add --no-cache --update tini openssl curl zip unzip

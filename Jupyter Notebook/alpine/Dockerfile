@@ -1,8 +1,19 @@
 # [Choice] Alpine version: 3.17, 3.16, 3.15, 3.14, 3.13, 3.12, 3.11
 #ARG VARIANT=3.15
 #FROM alpine:${VARIANT}
-#FROM alpine:3.17
-FROM frolvlad/alpine-glibc:alpine-3.17
+FROM alpine:3.17 as alpine-glibc
+
+# Install alpine-pkg-glibc from https://github.com/sgerrand/alpine-pkg-glibc
+# Code from https://github.com/Docker-Hub-frolvlad/docker-alpine-glibc/blob/master/Dockerfile
+
+#"2.35-r1"
+ARG GLIBC_VERSION="2.34-r0"
+ENV LANG=C.UTF-8
+COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
+RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
+
+
+FROM alpine-glibc
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="false"
@@ -18,13 +29,6 @@ COPY environment.yml* noop.txt /tmp/conda-tmp/
 
 COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
 RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" 
-
-# Install alpine-pkg-glibc from https://github.com/sgerrand/alpine-pkg-glibc
-# Code from https://github.com/Docker-Hub-frolvlad/docker-alpine-glibc/blob/master/Dockerfile
-
-ARG GLIBC_VERSION="2.35-r1"
-ENV LANG=C.UTF-8
-#RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
 
 ARG CONDA_VERSION="py39_23.1.0-1"
 ARG CONDA_SHA256="5dc619babc1d19d6688617966251a38d245cb93d69066ccde9a013e1ebb5bf18"

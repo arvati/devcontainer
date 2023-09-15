@@ -2,9 +2,21 @@
 #ARG VARIANT=3.17
 #FROM alpine:${VARIANT}
 #FROM alpine:3.17
-FROM frolvlad/alpine-glibc:alpine-3.17
+FROM alpine:3.17 as alpine-glibc
 
-ENV NODE_VERSION 18.14.2
+# Install alpine-pkg-glibc from https://github.com/sgerrand/alpine-pkg-glibc
+# Code from https://github.com/Docker-Hub-frolvlad/docker-alpine-glibc/blob/master/Dockerfile
+
+#"2.35-r1"
+ARG GLIBC_VERSION="2.34-r0" 
+ENV LANG=C.UTF-8
+COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
+RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
+
+
+FROM alpine-glibc
+
+ENV NODE_VERSION 18.17.1
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="false"
@@ -17,13 +29,6 @@ ARG USER_GID=$USER_UID
 
 COPY library-scripts/*.sh library-scripts/*.env /tmp/library-scripts/
 RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" 
-
-# Install alpine-pkg-glibc from https://github.com/sgerrand/alpine-pkg-glibc
-# Code from https://github.com/Docker-Hub-frolvlad/docker-alpine-glibc/blob/master/Dockerfile
-
-ARG GLIBC_VERSION="2.35-r1"
-ENV LANG=C.UTF-8
-#RUN apk update && ash /tmp/library-scripts/glibc-alpine.sh "${GLIBC_VERSION}" "${LANG}" 
 
 # Install deta space cli from https://github.com/deta/space-cli
 
